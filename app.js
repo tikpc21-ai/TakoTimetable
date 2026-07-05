@@ -5,6 +5,7 @@
 let state = {
     isAdminLoggedIn: false,
     schoolData: {
+        gasUrl: "https://script.google.com/macros/s/AKfycbw1zlmz1fdnBaLxLke4LMjUy7mY-38wxW5eilhYnhpCx6UjSVfulzYbqBxpmKJRhurT/exec",
         SchoolName: "โรงเรียนวัดบ้านตะโกตาพิ",
         DirectorName: "นายอัครเดช กิจคณะ",
         DirectorPosition: "ผู้อำนวยการโรงเรียนวัดบ้านตะโกตาพิ",
