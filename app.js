@@ -193,7 +193,12 @@ const elements = {
     subFormBulkSection: document.getElementById("sub-form-bulk-section"),
     bulkSubjectInput: document.getElementById("bulk-subject-input"),
     btnAddBulkSubjects: document.getElementById("btn-add-bulk-subjects"),
-    checksheetSortSelect: document.getElementById("checksheet-sort-select")
+    checksheetSortSelect: document.getElementById("checksheet-sort-select"),
+    publicSubDateFilter: document.getElementById("public-sub-date-filter"),
+    publicSubAbsentFilter: document.getElementById("public-sub-absent-filter"),
+    publicSubTeacherFilter: document.getElementById("public-sub-teacher-filter"),
+    exportPublicSubsBtn: document.getElementById("export-public-subs-btn"),
+    publicSubsTableBody: document.querySelector("#public-subs-table tbody")
 };
 
 // Get current active schedule array
@@ -940,6 +945,12 @@ function setupEventListeners() {
     elements.saveSubBtn.addEventListener("click", saveSubstitutionRecord);
     elements.exportSubWordBtn.addEventListener("click", exportSubToWord);
     
+    // Public Substitutions events
+    if(elements.publicSubDateFilter) elements.publicSubDateFilter.addEventListener("change", renderPublicSubstitutions);
+    if(elements.publicSubAbsentFilter) elements.publicSubAbsentFilter.addEventListener("change", renderPublicSubstitutions);
+    if(elements.publicSubTeacherFilter) elements.publicSubTeacherFilter.addEventListener("change", renderPublicSubstitutions);
+    if(elements.exportPublicSubsBtn) elements.exportPublicSubsBtn.addEventListener("click", exportPublicSubstitutionsToExcel);
+    
     // Manual Selector override for Substitution
     elements.manualSubSelect.addEventListener("change", (e) => {
         const selectedTeacher = e.target.value;
@@ -1207,6 +1218,7 @@ function switchTab(tabName) {
         "student-schedule": { title: "ตารางเรียนรายชั้น", subtitle: "สำหรับพิมพ์หรือตรวจสอบตารางของนักเรียน" },
         "teacher-schedule": { title: "ตารางสอนรายบุคคล", subtitle: "สำหรับคุณครูตรวจสอบชั่วโมงสอนสะสมรายสัปดาห์" },
         "master-schedule": { title: "ตารางสอนรวม", subtitle: "ตารางสรุปการใช้งานชั่วโมงสอนรวมของโรงเรียนรายวัน" },
+        "public-subs": { title: "รายการสอนแทน (สาธารณะ)", subtitle: "ตรวจสอบประวัติการสอนแทนและส่งออกเป็นไฟล์ Excel" },
         "substitution": { title: "ระบบจัดสอนแทนอัจฉริยะ", subtitle: "วิเคราะห์ความสอดคล้องและจัดครูสอนแทนเพื่อลดภาระงาน" },
         "subjects": { title: "จัดการรายวิชาเรียน", subtitle: "เพิ่ม ลบ และดูชั่วโมงสอนสะสมของรายวิชาต่าง ๆ" },
         "planner": { title: "ปรับปรุงและจัดตารางสอน", subtitle: "วิเคราะห์ตารางชนกันและวางแผนตารางสอนปีการศึกษาถัดไป" },
@@ -1235,6 +1247,9 @@ function switchTab(tabName) {
         renderSettings();
     } else if (tabName === "checksheets") {
         renderChecksheet();
+    } else if (tabName === "public-subs") {
+        populatePublicSubFilters();
+        renderPublicSubstitutions();
     }
 }
 
@@ -1330,7 +1345,7 @@ function fillDropdowns(primary, secondary, other, teachers) {
     });
     
     // Populate checksheet classes dropdown separately using DMC students if available
-    const checksheetClasses = [...new Set((state.schoolData.Students || []).map(s => s.class))].sort();
+    const checksheetClasses = [...new Set((state.schoolData.Students || []).filter(s => (s.semester || "1") === currentSemester).map(s => s.class))].sort();
     let checksheetClassHTML = '<option value="">-- เลือกชั้นเรียน --</option>';
     
     if (checksheetClasses.length > 0) {
@@ -2225,6 +2240,105 @@ function renderSubstitutionsTable() {
             tbody.appendChild(tr);
         });
     });
+}
+
+// Public Substitutions Logic
+function renderPublicSubstitutions() {
+    const tbody = elements.publicSubsTableBody;
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    let semesterSubs = state.substitutions.filter(s => s.semester === currentSemester);
+    
+    const filterDate = elements.publicSubDateFilter.value;
+    const filterAbsent = elements.publicSubAbsentFilter.value;
+    const filterSub = elements.publicSubTeacherFilter.value;
+    
+    if (filterDate) {
+        semesterSubs = semesterSubs.filter(s => s.date === filterDate);
+    }
+    if (filterAbsent) {
+        semesterSubs = semesterSubs.filter(s => s.absentTeacher === filterAbsent);
+    }
+    
+    let allFilteredPeriods = [];
+    
+    semesterSubs.forEach(sub => {
+        const pKeys = Object.keys(sub.periodSubstitutions);
+        pKeys.forEach(pKey => {
+            const pSub = sub.periodSubstitutions[pKey];
+            if (filterSub && pSub.subTeacher !== filterSub) return;
+            
+            allFilteredPeriods.push({
+                date: sub.date,
+                day: sub.day,
+                absentTeacher: sub.absentTeacher,
+                period: pKey,
+                subject: pSub.subject,
+                className: pSub.className,
+                subTeacher: pSub.subTeacher
+            });
+        });
+    });
+    
+    allFilteredPeriods.sort((a, b) => new Date(b.date) - new Date(a.date) || a.period - b.period);
+    
+    if (allFilteredPeriods.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">ไม่พบประวัติการจัดสอนแทน (นำเข้าข้อมูลหรือเริ่มบันทึกใหม่)</td></tr>';
+        return;
+    }
+    
+    allFilteredPeriods.forEach(pSub => {
+        const parsedDate = new Date(pSub.date);
+        const formattedDate = `${parsedDate.getDate()}/${parsedDate.getMonth()+1}/${parsedDate.getFullYear()+543}`;
+        
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${formattedDate} (${pSub.day})</td>
+            <td class="font-bold text-danger">${pSub.absentTeacher}</td>
+            <td>${pSub.className}</td>
+            <td>คาบ ${pSub.period}</td>
+            <td>${pSub.subject}</td>
+            <td class="text-blue font-semibold">${pSub.subTeacher}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function populatePublicSubFilters() {
+    const absentSelect = elements.publicSubAbsentFilter;
+    const subTeacherSelect = elements.publicSubTeacherFilter;
+    if (!absentSelect || !subTeacherSelect) return;
+    
+    const currAbsentVal = absentSelect.value;
+    const currSubVal = subTeacherSelect.value;
+    
+    absentSelect.innerHTML = '<option value="">-- ดูทั้งหมด --</option>';
+    subTeacherSelect.innerHTML = '<option value="">-- ดูทั้งหมด --</option>';
+    
+    const sortedTeachers = [...state.schoolData.Teachers].sort((a,b)=>a.name.localeCompare(b.name));
+    
+    sortedTeachers.forEach(t => {
+        const opt1 = document.createElement("option");
+        opt1.value = t.name;
+        opt1.textContent = t.name;
+        absentSelect.appendChild(opt1);
+        
+        const opt2 = document.createElement("option");
+        opt2.value = t.name;
+        opt2.textContent = t.name;
+        subTeacherSelect.appendChild(opt2);
+    });
+    
+    absentSelect.value = currAbsentVal;
+    subTeacherSelect.value = currSubVal;
+}
+
+function exportPublicSubstitutionsToExcel() {
+    const table = document.getElementById("public-subs-table");
+    if (!table) return;
+    const wb = XLSX.utils.table_to_book(table, {sheet: "รายการสอนแทน"});
+    XLSX.writeFile(wb, `รายการสอนแทน_เทอม${currentSemester}.xlsx`);
 }
 
 // Subject Management Page Functions
@@ -3647,6 +3761,7 @@ function handleStudentFile(file) {
                 // fallback to row 1
                 headerRowIndex = 1;
             }
+            const targetSemester = document.getElementById("import-student-semester-select") ? document.getElementById("import-student-semester-select").value : currentSemester;
             
             const students = [];
             
@@ -3682,7 +3797,8 @@ function handleStudentFile(file) {
                         firstName: firstVal,
                         lastName: lastVal,
                         class: cls,
-                        room: room
+                        room: room,
+                        semester: targetSemester
                     });
                 }
             }
@@ -3692,7 +3808,11 @@ function handleStudentFile(file) {
                 return;
             }
             
-            state.schoolData.Students = students;
+            if (!state.schoolData.Students) state.schoolData.Students = [];
+            // ลบข้อมูลนักเรียนเก่า "เฉพาะของเทอมที่เลือก" ออกไปก่อน (เก็บของอีกเทอมไว้)
+            state.schoolData.Students = state.schoolData.Students.filter(s => (s.semester || "1") !== targetSemester);
+            // นำรายชื่อใหม่ต่อท้าย
+            state.schoolData.Students = [...state.schoolData.Students, ...students];
             saveStateToCache();
             
             // Refresh UI dropdowns
@@ -3764,7 +3884,7 @@ function renderChecksheet() {
         return;
     }
 
-    const students = (state.schoolData.Students || []).filter(s => s.class === selectedClass);
+    const students = (state.schoolData.Students || []).filter(s => s.class === selectedClass && (s.semester || "1") === currentSemester);
     if (students.length === 0) {
         table.innerHTML = '<tr><td colspan="15" class="text-center p-6 text-muted">ไม่พบรายชื่อนักเรียนในชั้นเรียนนี้ (โปรดอัปโหลดไฟล์รายชื่อนักเรียน DMC ก่อน)</td></tr>';
         return;
@@ -3899,7 +4019,7 @@ function exportChecksheetToExcel() {
         return;
     }
     
-    const students = (state.schoolData.Students || []).filter(s => s.class === selectedClass);
+    const students = (state.schoolData.Students || []).filter(s => s.class === selectedClass && (s.semester || "1") === currentSemester);
     if (students.length === 0) {
         alert("ไม่พบข้อมูลรายชื่อนักเรียนในชั้นเรียนนี้");
         return;
@@ -4000,9 +4120,13 @@ function backupDatabase() {
     
     const a = document.createElement("a");
     a.href = url;
-    a.download = `TakoTimetable_Database_Backup_${state.schoolData.SchoolName}_2569.json`;
-    document.body.appendChild(a);
-    a.click();
+    a.download = `TakoTim        if (state.schoolData.Students) {
+            state.schoolData.Students.forEach(stu => {
+                if ((stu.semester || "1") !== currentSemester) return;
+                if (!classes[stu.class]) classes[stu.class] = { classes: 0, studentCount: 0 };
+                classes[stu.class].studentCount = (classes[stu.class].studentCount || 0) + 1;
+            });
+        });
     document.body.removeChild(a);
     alert("สำรองฐานข้อมูลของระบบตารางเรียนเสร็จสิ้น! กรุณาเก็บรักษาไฟล์นี้ไว้สำหรับกู้คืนข้อมูล");
 }

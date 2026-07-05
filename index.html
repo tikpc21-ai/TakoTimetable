@@ -60,6 +60,9 @@ navigator.serviceWorker.register("sw.js");
                 <a href="#" class="nav-item" data-tab="checksheets">
                     <i class="fa-solid fa-clipboard-list"></i> <span>ใบเช็คชื่อ/รายชื่อนักเรียน</span>
                 </a>
+                <a href="#" class="nav-item" data-tab="public-subs">
+                    <i class="fa-solid fa-exchange-alt"></i> <span>รายการสอนแทน (สาธารณะ)</span>
+                </a>
                 <a href="#" class="nav-item admin-only hidden-element" data-tab="substitution">
                     <i class="fa-solid fa-user-gear"></i> <span>จัดสอนแทนอัจฉริยะ</span>
                 </a>
@@ -430,8 +433,59 @@ navigator.serviceWorker.register("sw.js");
                     </div>
                 </section>
 
+                <!-- Page 5.5: Public Substitution View -->
+                <section id="tab-public-subs" class="tab-page hidden-element">
+                    <div class="filter-bar no-print flex-row gap-4 flex-wrap">
+                        <div class="form-group mb-0">
+                            <label for="public-sub-date-filter" style="display:block; margin-bottom: 5px;">กรองตามวันที่:</label>
+                            <input type="date" id="public-sub-date-filter" class="form-control" style="width: auto;">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="public-sub-absent-filter" style="display:block; margin-bottom: 5px;">กรองตามครูที่ลา:</label>
+                            <select id="public-sub-absent-filter" class="form-control" style="width: 250px;">
+                                <option value="">-- ดูทั้งหมด --</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="public-sub-teacher-filter" style="display:block; margin-bottom: 5px;">กรองตามครูสอนแทน:</label>
+                            <select id="public-sub-teacher-filter" class="form-control" style="width: 250px;">
+                                <option value="">-- ดูทั้งหมด --</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0" style="margin-left: auto;">
+                            <label style="display:block; margin-bottom: 5px;">&nbsp;</label>
+                            <button id="export-public-subs-btn" class="btn btn-secondary"><i class="fa-solid fa-file-excel"></i> ดาวน์โหลดผลงาน (Excel)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-6">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-list-check"></i> รายการจัดครูสอนแทน (สาธารณะ)</h3>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table" id="public-subs-table">
+                                <thead>
+                                    <tr>
+                                        <th>วันที่สอนแทน</th>
+                                        <th>ครูประจำการที่ลา</th>
+                                        <th>ชั้นเรียน</th>
+                                        <th>คาบที่</th>
+                                        <th>วิชา</th>
+                                        <th>ครูสอนแทน</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">ไม่พบข้อมูล หรือเลือกเงื่อนไขเพื่อค้นหา</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Page 6: Smart Substitution (Admin Only) -->
-                <section id="tab-substitution" class="tab-page">
+                <section id="tab-substitution" class="tab-page hidden-element">
                     <div class="dashboard-grid">
                         <!-- Left form: Setup substitution request -->
                         <div class="card col-2 no-print">
@@ -1066,6 +1120,13 @@ function doPost(e) {
                 </div>
 
                 <div id="modal-student-section" class="hidden-element">
+                    <div class="form-group mb-4">
+                        <label for="import-student-semester-select">ระบุภาคเรียนที่จะนำเข้ารายชื่อนักเรียน:</label>
+                        <select id="import-student-semester-select" class="form-control">
+                            <option value="1">ภาคเรียนที่ 1</option>
+                            <option value="2">ภาคเรียนที่ 2</option>
+                        </select>
+                    </div>
                     <div id="drop-zone-student" class="upload-dropzone">
                         <i class="fa-solid fa-users-line upload-icon" style="color:var(--primary-color);"></i>
                         <p class="upload-text">ลากไฟล์รายชื่อนักเรียน <code>student  2569 -DMC.xlsx</code> มาวางที่นี่</p>
