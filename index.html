@@ -976,17 +976,36 @@ navigator.serviceWorker.register("sw.js");
                             <pre class="bg-slate p-3 rounded" style="background-color:var(--border-color); font-family:monospace; font-size:11px; max-height:200px; overflow-y:auto; line-height:1.4;">
 function doGet() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = sheet.getRange("A1").getValue();
-  return ContentService.createTextOutput(data || "{}")
-    .setMimeType(ContentService.MimeType.JSON);
+  var lastRow = sheet.getLastRow();
+  if (lastRow === 0) {
+    return ContentService.createTextOutput("{}").setMimeType(ContentService.MimeType.JSON);
+  }
+  var dataValues = sheet.getRange(1, 1, lastRow, 1).getValues();
+  var fullJson = dataValues.map(function(row) { return row[0]; }).join('');
+  
+  return ContentService.createTextOutput(fullJson || "{}").setMimeType(ContentService.MimeType.JSON);
 }
 
 function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var jsonPayload = e.postData.contents;
-  sheet.getRange("A1").setValue(jsonPayload);
-  return ContentService.createTextOutput(JSON.stringify({status: "success"}))
-    .setMimeType(ContentService.MimeType.JSON);
+  
+  // ล้างข้อมูลเก่าทิ้งก่อน
+  sheet.getRange("A:A").clearContent();
+  
+  // หั่นข้อความทีละ 50,000 ตัวอักษร (Google Sheet 1 ช่องรับได้สูงสุด 50k)
+  var chunkSize = 50000;
+  var chunks = [];
+  for (var i = 0; i < jsonPayload.length; i += chunkSize) {
+    chunks.push([jsonPayload.substring(i, i + chunkSize)]);
+  }
+  
+  // เซฟลงหลายๆ บรรทัดในคอลัมน์ A
+  if (chunks.length > 0) {
+    sheet.getRange(1, 1, chunks.length, 1).setValues(chunks);
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
 }
                             </pre>
                         </div>
