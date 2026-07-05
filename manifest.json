@@ -1,0 +1,16 @@
+{
+  "name": "Tako Intelligent Timetable",
+  "short_name": "TakoTimetable",
+  "description": "ระบบบริหารตารางเรียนและงานวิชาการอัจฉริยะ โรงเรียนวัดบ้านตะโกตาพิ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTIyIDEyYzAgNS41MjMtNC40NzcgMTAtMTAgMTBTMiAxNy41MjMgMiAxMiA2LjQ3NyAy 12IDJzMTAgNC40NzcgMTAgMTB6IiBmaWxsPSIjMGQ2ZWZkIi8+PC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

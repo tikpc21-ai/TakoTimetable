@@ -1,0 +1,1561 @@
+/* TakoTimetable Custom CSS Stylesheet */
+
+/* Define CSS Variables for Theming */
+:root {
+    --primary-color: #3b82f6; /* Modern Blue */
+    --primary-hover: #2563eb;
+    --secondary-color: #64748b; /* Slate Gray */
+    --secondary-hover: #475569;
+    --success-color: #10b981; /* Emerald Green */
+    --success-hover: #059669;
+    --warning-color: #f59e0b; /* Amber */
+    --danger-color: #ef4444; /* Rose Red */
+    --light-bg: #f8fafc; /* Very light slate */
+    --card-bg: #ffffff;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --sidebar-bg: #0f172a; /* Deep dark slate for sidebar */
+    --sidebar-text: #f1f5f9;
+    --sidebar-active: #3b82f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --font-sans: 'Outfit', 'Sarabun', sans-serif;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-blur: blur(12px);
+}
+
+/* Dark Theme overrides */
+body.dark-theme {
+    --light-bg: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --sidebar-bg: #020617;
+    --sidebar-text: #f1f5f9;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(51, 65, 85, 0.5);
+}
+
+/* Global Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    line-height: 1.5;
+    overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Main Application Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    flex-shrink: 0;
+    z-index: 100;
+    transition: width 0.3s;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 20px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.logo-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Semester Switcher styling in Sidebar */
+.semester-switcher-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.switcher-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.switcher-buttons {
+    display: flex;
+    gap: 4px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 3px;
+    border-radius: 8px;
+}
+
+.switcher-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.2s;
+}
+
+.switcher-btn:hover {
+    color: #ffffff;
+}
+
+.switcher-btn.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 16px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 14px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.nav-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.nav-item.active {
+    background-color: var(--sidebar-active);
+    color: #ffffff;
+    box-shadow: 0 4px 12px 0 rgba(59, 130, 246, 0.35);
+}
+
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.school-label {
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.year-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* Top Header */
+.top-header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.header-title-area h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.header-title-area p {
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.active-semester-badge {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.mobile-nav-toggle {
+    display: none;
+}
+
+/* Page Containers */
+.page-container {
+    padding: 24px;
+    flex-grow: 1;
+}
+
+.tab-page {
+    display: none;
+}
+
+.tab-page.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Base UI Components */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background-color: var(--success-hover);
+}
+
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.btn-icon-text {
+    padding: 8px 14px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 6px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-control[readonly], .form-control[disabled] {
+    background-color: var(--light-bg);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Dashboard Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    border-radius: 16px;
+    padding: 20px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+.gradient-purple { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
+.gradient-orange { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
+.gradient-green { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+
+/* Grid Layouts */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.col-2 {
+    grid-column: span 2;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+/* Quick Search Box styles */
+.search-quick {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.quick-lookup-box {
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.quick-lookup-box h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.flex-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gap-2 { gap: 6px; }
+.gap-4 { gap: 16px; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-8 { margin-top: 32px; }
+.my-6 { margin: 24px 0; }
+.ml-2 { margin-left: 8px; }
+.ml-6 { margin-left: 24px; }
+.col-span-2 { grid-column: span 2; }
+.flex-1 { flex: 1; }
+.flex-wrap { flex-wrap: wrap; }
+.w-full { width: 100%; }
+
+.admin-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.admin-avatar {
+    width: 44px;
+    height: 44px;
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.admin-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-role {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.admin-name {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Tables styling */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: var(--card-bg);
+}
+
+.table th, .table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+}
+
+.table th {
+    background-color: var(--light-bg);
+    font-weight: 600;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Timetable Grid View (Student/Teacher) */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    background-color: var(--card-bg);
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.inline-select {
+    width: auto;
+    min-width: 180px;
+}
+
+.inline-select-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* Filter Badges in Master Timetable */
+.level-filter-badges {
+    display: flex;
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    padding: 3px;
+    border-radius: 8px;
+    gap: 4px;
+}
+
+.filter-badge {
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-badge:hover {
+    color: var(--text-color);
+}
+
+.filter-badge.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: var(--shadow-sm);
+}
+
+.timetable-print-container {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+}
+
+.print-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.print-school-name {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.print-doc-title {
+    font-size: 18px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.timetable-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.timetable-grid th, .timetable-grid td {
+    border: 1px solid #000000;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 13px;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+.timetable-grid th {
+    background-color: #f1f5f9;
+    font-weight: 700;
+}
+
+.timetable-grid td.day-cell {
+    font-weight: 700;
+    background-color: #f8fafc;
+    width: 80px;
+}
+
+.timetable-grid td.period-header {
+    background-color: #f1f5f9;
+    font-weight: 700;
+}
+
+.time-slot {
+    font-size: 11px;
+    font-weight: normal;
+    color: #475569;
+    display: block;
+    margin-top: 2px;
+}
+
+.timetable-grid td.lunch-cell {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-size: 12px;
+}
+
+.subject-name {
+    font-weight: 700;
+    display: block;
+}
+
+.teacher-name {
+    font-size: 11px;
+    color: #475569;
+    display: block;
+    margin-top: 2px;
+}
+
+.coteacher-name {
+    font-size: 10px;
+    color: #0284c7;
+    display: block;
+    font-style: italic;
+    margin-top: 1px;
+}
+
+.print-footer {
+    margin-top: 40px;
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.signature-box {
+    text-align: center;
+}
+
+.signature-box p {
+    margin-bottom: 8px;
+}
+
+/* Master Grid View Custom Styles */
+.master-grid-layout th, .master-grid-layout td {
+    font-size: 11px;
+    padding: 6px 2px;
+}
+
+.master-grid-layout td.class-cell {
+    font-weight: 700;
+    background-color: #f8fafc;
+    width: 60px;
+}
+
+/* Smart Substitution Form Letter stylesheet */
+.form-letter {
+    font-family: 'Sarabun', sans-serif !important;
+    padding: 48px;
+    border: 1px solid #94a3b8;
+    background-color: #ffffff;
+    color: #000000;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.form-subtitle {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-date-line {
+    margin-top: 16px;
+    font-size: 16px;
+}
+
+.form-body p {
+    text-indent: 40px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    text-align: justify;
+}
+
+.border-bottom-dot {
+    border-bottom: 1px dotted #000000;
+}
+
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.form-table th, .form-table td {
+    border: 1px solid #000000;
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.form-table th {
+    background-color: #f8fafc;
+}
+
+.block-signature {
+    text-align: center;
+    line-height: 1.8;
+}
+
+.form-separator {
+    border: 0;
+    border-top: 1px solid #000000;
+}
+
+.director-comment, .academic-comment {
+    border: 1px solid #000000;
+    padding: 16px;
+    border-radius: 4px;
+    margin-top: 16px;
+    line-height: 1.8;
+}
+
+/* Smart Substitution Form grid & UI cards */
+.sub-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.periods-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    background-color: var(--light-bg);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.period-check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--card-bg);
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.period-check-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.period-check-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.period-check-label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.period-check-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* Smart substitution recommendations list */
+.sub-rec-card {
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.sub-rec-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+.sub-rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.teacher-candidate-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.teacher-candidate-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.teacher-candidate-card.selected {
+    border-color: var(--success-color);
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.teacher-candidate-card.selected::after {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--success-color);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.candidate-name {
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.candidate-reason {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.candidate-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+.badge-blue { background-color: rgba(59, 130, 246, 0.1); color: var(--primary-color); }
+.badge-green { background-color: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+.badge-orange { background-color: rgba(249, 115, 22, 0.1); color: var(--warning-color); }
+
+/* Schedule planner editable table stylesheet */
+.table-editable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-editable th, .table-editable td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-editable th {
+    background-color: var(--light-bg);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.table-editable select, .table-editable input {
+    width: 100%;
+    padding: 6px 8px;
+    font-family: var(--font-sans);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 13px;
+}
+
+/* Modals */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-backdrop.active {
+    display: flex;
+}
+
+.modal-card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    width: 600px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+}
+
+/* Upload zone */
+.upload-dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--light-bg);
+    transition: all 0.2s;
+}
+
+.upload-dropzone:hover, .upload-dropzone.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.upload-icon {
+    font-size: 40px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.upload-text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.upload-text-or {
+    margin: 10px 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.upload-status-box {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.status-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Alert component */
+.alert {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid transparent;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+/* settings page teachers list styles with exemptions */
+.teachers-manage-list-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    background-color: var(--light-bg);
+}
+
+.teacher-manage-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--card-bg);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.teacher-name-input {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+}
+
+.exempt-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.exempt-checkbox-label input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.btn-delete-teacher {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* periods times configuration */
+.periods-time-config {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.period-time-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.period-time-num {
+    width: 50px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Helpers */
+.hidden-element {
+    display: none !important;
+}
+
+.mt-2 { margin-top: 8px; }
+.italic { font-style: italic; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted) !important; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.border-slate { border-color: var(--border-color); }
+.line-height-relaxed { line-height: 1.6; }
+.text-sm { font-size: 13px; }
+.text-xs { font-size: 11px; }
+.text-danger { color: var(--danger-color); }
+.text-blue { color: var(--primary-color); }
+.list-bullet { list-style-type: disc; margin-left: 20px; }
+.list-numeric { list-style-type: decimal; margin-left: 20px; }
+.pl-6 { padding-left: 24px; }
+.mb-1 { margin-bottom: 4px; }
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .col-2 {
+        grid-column: span 1;
+    }
+    .col-3 {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        display: none; /* Mobile menu toggles this */
+    }
+    .sidebar.active {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px;
+    }
+    .mobile-nav-toggle {
+        display: flex;
+    }
+    .top-header {
+        padding: 16px 20px;
+    }
+    .page-container {
+        padding: 16px;
+    }
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .inline-select {
+        width: 100%;
+    }
+    .signature-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+/* PRINT MEDIA STYLES - Hides website shell and prints ONLY the sheet */
+@media print {
+    .no-print, 
+    .sidebar, 
+    .top-header, 
+    .filter-bar, 
+    #import-excel-btn, 
+    .modal-backdrop, 
+    #theme-toggle {
+        display: none !important;
+    }
+    
+    body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    .app-container {
+        display: block;
+        min-height: auto;
+        width: 100%;
+    }
+    
+    .main-content {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .page-container {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .tab-page {
+        display: none !important;
+    }
+    
+    .tab-page.active {
+        display: block !important;
+    }
+    
+    /* Make sure printable areas take up full page */
+    .timetable-print-container {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    
+    .table-responsive {
+        border: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+    
+    /* Force page break settings */
+    .timetable-print-container {
+        page-break-inside: avoid;
+    }
+    
+    /* Formatting royal letters / royal form letters */
+    .form-letter {
+        border: none !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+}
+
+/* === Phase 3 CSS Additions === */
+
+.sidebar-admin-login-area {
+    padding: 16px 12px 0 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 12px;
+}
+
+#admin-login-toggle-btn {
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-sans);
+    transition: all 0.2s;
+}
+
+#admin-login-toggle-btn.logged-in {
+    background-color: var(--danger-color);
+    color: #ffffff;
+}
+
+#admin-login-toggle-btn.logged-in:hover {
+    background-color: #dc2626;
+}
+
+.modal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.modal-tabs .btn {
+    flex: 1;
+    font-size: 11px;
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+
+.modal-close-login {
+    cursor: pointer;
+}
+
+/* === Checksheet Table & Print A4 Layout === */
+.checksheet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-family: 'Sarabun', sans-serif;
+    color: #1e293b;
+}
+
+.checksheet-table th, 
+.checksheet-table td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 8px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.checksheet-table th {
+    background-color: #f1f5f9;
+    font-weight: 700;
+    color: #334155;
+}
+
+.checksheet-table td.student-name-col {
+    text-align: left;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.checksheet-table tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+
+/* Teacher Hour Badge & Suggester */
+.teacher-hour-badge {
+    background-color: rgba(99, 102, 241, 0.15);
+    color: var(--primary-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.suggested-teacher-badge {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: var(--success-color);
+}
+
+.suggester-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.suggester-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.suggester-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.suggester-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.suggester-name {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.suggester-stats {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Printable A4 Form fitting */
+@media print {
+    .checksheet-table th, 
+    .checksheet-table td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        background-color: transparent !important;
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+    
+    .checksheet-header h2 {
+        font-size: 18px !important;
+        color: #000000 !important;
+    }
+    
+    .checksheet-header h3 {
+        font-size: 16px !important;
+        color: #000000 !important;
+    }
+    
+    /* Ensure single page print for A4 */
+    #checksheet-print-area {
+        page-break-inside: avoid;
+        max-height: 100%;
+        overflow: hidden;
+    }
+}
+
+.suggested-teacher-badge {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: var(--success-color) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.btn-xs {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+.print-logo-image {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 65px;
+    height: auto;
+    object-fit: contain;
+}
+
+.logo-image {
+    margin-right: 8px;
+    border-radius: 4px;
+}
+
+
+
