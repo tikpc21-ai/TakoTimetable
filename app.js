@@ -203,7 +203,8 @@ const elements = {
 
 // Get current active schedule array
 function getActiveSchedule() {
-    return currentSemester === 1 ? state.schoolData.ScheduleSem1 : state.schoolData.ScheduleSem2;
+    if (currentSemester === 1) return state.schoolData.ScheduleSem1 || [];
+    return state.schoolData.ScheduleSem2 || [];
 }
 
 // Standardize Class levels (e.g. "ป1" -> "ป.1", "ม 2/1" -> "ม.2/1")
@@ -421,6 +422,9 @@ function loadCachedData() {
             if (!parsed.Students) {
                 parsed.Students = [];
             }
+            if (!parsed.Teachers) parsed.Teachers = [];
+            if (!parsed.ScheduleSem1) parsed.ScheduleSem1 = [];
+            if (!parsed.ScheduleSem2) parsed.ScheduleSem2 = [];
             
             // Auto populate SubjectMap from Subjects list if empty
             if (parsed.SubjectMap.length === 0 && parsed.Subjects && parsed.Subjects.length > 0) {
@@ -1256,8 +1260,9 @@ function switchTab(tabName) {
 // Initialize UI Stats & Dropdowns
 function initUI() {
     // Fill stats
-    elements.statSchoolName.textContent = state.schoolData.SchoolName;
-    elements.statTeacherCount.textContent = `${state.schoolData.Teachers.length} ท่าน`;
+    elements.statSchoolName.textContent = state.schoolData.SchoolName || "โรงเรียน";
+    const teachers = state.schoolData.Teachers || [];
+    elements.statTeacherCount.textContent = `${teachers.length} ท่าน`;
     
     const activeSched = getActiveSchedule();
     const uniqueClasses = [...new Set(activeSched.map(s => s.Class))];
@@ -1275,12 +1280,14 @@ function initUI() {
         
         let scheduledHours = 0;
         activeSched.forEach(sch => {
-            if (sub.classLevel && (sch.Class === sub.classLevel || sch.Class.startsWith(sub.classLevel))) {
-                sch.Periods.forEach(p => {
-                    if (p.Subject && isSubjectNameMatch(p.Subject, sub.name)) {
-                        scheduledHours++;
-                    }
-                });
+            if (sch && sch.Class && sub.classLevel && (sch.Class === sub.classLevel || sch.Class.startsWith(sub.classLevel))) {
+                if (Array.isArray(sch.Periods)) {
+                    sch.Periods.forEach(p => {
+                        if (p && p.Subject && isSubjectNameMatch(p.Subject, sub.name)) {
+                            scheduledHours++;
+                        }
+                    });
+                }
             }
         });
         totalSched += Math.min(scheduledHours, hrs);
@@ -1290,7 +1297,8 @@ function initUI() {
         elements.statScheduleCompleteness.textContent = `${completeness}%`;
     }
     
-    const semesterSubs = state.substitutions.filter(s => s.semester === currentSemester);
+    const subsArray = Array.isArray(state.substitutions) ? state.substitutions : [];
+    const semesterSubs = subsArray.filter(s => s.semester === currentSemester);
     elements.statSubCount.textContent = `${semesterSubs.length} รายการ`;
     
     // Fill Admins
@@ -1304,7 +1312,9 @@ function initUI() {
     const secondaryClasses = uniqueClasses.filter(c => getClassLevel(c) === "secondary").sort();
     const otherClasses = uniqueClasses.filter(c => getClassLevel(c) === "other").sort();
     
-    const sortedTeachers = [...state.schoolData.Teachers].sort((a, b) => a.name.localeCompare(b.name));
+    const sortedTeachers = [...(state.schoolData.Teachers || [])]
+        .filter(t => t && t.name)
+        .sort((a, b) => a.name.localeCompare(b.name));
     
     // Fill Selects
     fillDropdowns(primaryClasses, secondaryClasses, otherClasses, sortedTeachers);
