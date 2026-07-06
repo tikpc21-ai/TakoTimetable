@@ -1,0 +1,92 @@
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4W61C4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4TC1C4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4QK1C4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4e6yC4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4deyC4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/QGYyz_MVcBeNP4NjuGObqx1XmO1I4bCyC4E.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/DtVhJx26TKEr37c9aBBJmg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fonts/DtVmJx26TKEr37c9YL5rulw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/DtVjJx26TKEr37c9WBI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/DtVmJx26TKEr37c9YOZqulw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/DtVmJx26TKEr37c9YMptulw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/DtVmJx26TKEr37c9YK5sulw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/DtVmJx26TKEr37c9YLJvulw.ttf) format('truetype');
+}
+
